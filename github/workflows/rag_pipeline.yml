@@ -1,1 +1,21 @@
+name: Automated AI RAG Knowledge Pipeline
 
+on:
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+jobs:
+  run-rag-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Ingest & Chunk Knowledge Documents
+        run: python step1_ingest_and_chunk.py
+      - name: Run TF-IDF Semantic Retrieval Engine
+        run: python step2_semantic_retrieval.py
+      - name: Verify Chunk Metadata & Retrieval Recall Gates
+        run: python step3_rag_quality_check.py
